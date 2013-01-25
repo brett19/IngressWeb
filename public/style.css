@@ -1,0 +1,185 @@
+html {
+  height: 100%
+}
+body {
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+  font-family: Consolas;
+  font-size: 12px;
+}
+table {
+  font-family: Consolas;
+  font-size: 12px;
+}
+h3 {
+  display: inline;
+  padding: 0px;
+  margin: 0px;
+  text-decoration: underline;
+}
+#map_canvas {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width:800px;
+  height: 600px;
+}
+#playerInfo {
+  position: absolute;
+  top: 10px;
+  left: 820px;
+  border: 1px dashed #cccccc;
+  width: 390px;
+  height: 60px;
+  padding: 5px;
+}
+#actstartbot {
+  position: absolute;
+  top: 40px;
+  left: 315px;
+  width: 80px;
+}
+#actgatherxm {
+  position: absolute;
+  top: 5px;
+  left: 315px;
+  width: 80px;
+}
+
+#inventory {
+  position: absolute;
+  top: 90px;
+  left: 820px;
+  border: 1px dashed #cccccc;
+  width: 390px;
+  height: 260px;
+  padding: 5px;
+  overflow: auto;
+}
+#itemacts {
+  position: absolute;
+  top: 370px;
+  left: 820px;
+  border: 1px dashed #cccccc;
+  width: 390px;
+  height: 30px;
+  padding: 5px;
+  overflow: auto;
+}
+#portalInfo {
+  position: absolute;
+  top: 10px;
+  left: 1230px;
+  border: 1px dashed #cccccc;
+  width: 390px;
+  height: 390px;
+  padding: 5px;
+}
+#console {
+  position: absolute;
+  top: 420px;
+  left: 820px;
+  border: 1px dashed #cccccc;
+  width: 800px;
+  height: 180px;
+  padding: 5px;
+  font-family: Consolas;
+  font-size: 11px;
+  overflow: auto;
+}
+#consolex {
+  position: absolute;
+  top: 620px;
+  left: 820px;
+  border: 1px dashed #cccccc;
+  width: 800px;
+  height: 120px;
+  padding: 5px;
+  font-family: Consolas;
+  font-size: 11px;
+  overflow: auto;
+}
+#actguid {
+  width: 330px;
+}
+#invlist li {
+  padding: 4px 4px 4px 4px;
+  border: 1px solid #FFFFFF;
+  cursor: default;
+}
+#invlist li:hover {
+  background-color: #F4F4F4;
+}
+#invlist li.selected {
+  background-color: #DDDDDD;
+  border: 1px solid #999999;
+}
+
+#invlist li .icon {
+  display: block;
+  position: absolute;
+}
+#invlist li .info {
+  display: block;
+  min-height: 24px;
+  padding: 4px 4px 4px 36px;
+}
+#invlist li .guid {
+  display: none;
+}
+#invlist li .smallkey {
+  display: none;
+}
+
+#loginform {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  background-color: #ffffff;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#uiblocker {
+  position: absolute;
+  top: 10px;
+  left: 820px;
+  width: 812px;
+  height: 402px;
+  opacity: 0.3;
+  background-color: #000000;
+}
+#portalName {
+  font-weight: bold;
+}
+#portalAddr {
+  font-size: 11px;
+}
+#deploytable {
+  width: 100%;
+}
+#deploytable td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 3px;
+  width: 33%;
+}
+
+#shieldtable {
+  width: 100%;
+}
+#shieldtable td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 3px;
+  width: 25%;
+}
+
+
+
+
+
+
+
+

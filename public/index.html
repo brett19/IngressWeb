@@ -1,0 +1,143 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmJ4Pj_rcKLESzYiWfhtJETQPnakJ5YyE&sensor=false"></script>
+    <script type="text/javascript" src="latlon.js"></script>
+    <script type="text/javascript" src="helpers.js"></script>
+    <script type="text/javascript" src="IngressClient.js"></script>
+    <script type="text/javascript" src="IngressGame.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <title>HTML5 Ingress</title>
+  </head>
+  <body>
+    <div id="map_canvas"></div>
+    <div id="playerInfo">
+      <h3>Player Info</h3><br />
+      <b>Name: </b><span id="playerName"></span><br />
+      <b>AP: </b><span id="playerAp"></span><br />
+      <b>Energy: </b><span id="playerEnergy"></span>
+      <button id="actstartbot">Start Bot</button>
+      <button id="actgatherxm">Gather XM</button>
+    </div>
+    <div id="inventory">
+      <h3>Inventory</h3> (<span id="invTotal">?</span> Total)<br />
+      <ul id="invlist">
+      </ul>
+    </div>
+    <div id="portalInfo">
+      <h3>Portal</h3><br />
+      <br />
+      <span id="portalName">...</span><br />
+      <span id="portalAddr">...</span>
+      <br /><br />
+      
+      <button id="acthack">Hack Portal</button>
+      <button id="actlink">Link Portal</button>
+      <br /><br />
+
+      Shields:<br />
+      <table id="shieldtable" border="1">
+        <tr>
+          <td>
+            <span id="shield1type">-</span><br />
+            <span id="shield1rarity">-</span><br />
+            <button id="actaddshield1">Deploy</button>
+          </td>
+          <td>
+            <span id="shield2type">-</span><br />
+            <span id="shield2rarity">-</span><br />
+            <button id="actaddshield2">Deploy</button>
+          </td>
+          <td>
+            <span id="shield3type">-</span><br />
+            <span id="shield3rarity">-</span><br />
+            <button id="actaddshield3">Deploy</button>
+          </td>
+          <td>
+            <span id="shield4type">-</span><br />
+            <span id="shield4rarity">-</span><br />
+            <button id="actaddshield4">Deploy</button>
+          </td>
+        </tr>
+      </table>
+      <br />
+      Resonators:<br />
+      <table id="deploytable" border="1">
+        <tr>
+          <td>
+            Level: <span id="resnwlvl">?</span><br />
+            <button id="actdeploynw">Deploy</button>
+            <button id="actupgradenw">Upgrade</button>
+          </td>
+          <td>
+            Level: <span id="resnlvl">?</span><br />
+            <button id="actdeployn">Deploy</button>
+            <button id="actupgraden">Upgrade</button>
+            </td>
+          <td>
+            Level: <span id="resnelvl">?</span><br />
+            <button id="actdeployne">Deploy</button>
+            <button id="actupgradene">Upgrade</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Level: <span id="reswlvl">?</span><br />
+            <button id="actdeployw">Deploy</button>
+            <button id="actupgradew">Upgrade</button>
+          </td>
+          <td>&nbsp;</td>
+          <td>
+            Level: <span id="reselvl">?</span><br />
+            <button id="actdeploye">Deploy</button>
+            <button id="actupgradee">Upgrade</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Level: <span id="resswlvl">?</span><br />
+            <button id="actdeploysw">Deploy</button>
+            <button id="actupgradesw">Upgrade</button>
+          </td>
+          <td>
+            Level: <span id="resslvl">?</span><br />
+            <button id="actdeploys">Deploy</button>
+            <button id="actupgrades">Upgrade</button>
+          </td>
+          <td>
+            Level: <span id="resselvl">?</span><br />
+            <button id="actdeployse">Deploy</button>
+            <button id="actupgradese">Upgrade</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="itemacts">
+      <button id="actfire">Fire XMP</button>
+      <button id="actdrop">Drop Item</button>
+      <button id="actdropx">Drop X Items</button>
+    </div>
+    
+    <div id="console">
+    </div>
+    <!--
+    <div id="consolex">
+    </div>
+    -->
+    <div id="loginform">
+      Username: <input type="text" id="login_username" /><br />
+      Password: <input type="password" id="login_password" /><br />
+      <button id="actuplogin">User Login</button><br />
+      <br />
+      Auth Token: <input type="text" id="login_authtoken"><br />
+      <button id="actauthlogin">Token Login</button><br />
+      <br /><br />
+      <button id="actbrettlogin">Brett</button>
+      <button id="actchrislogin">Chris</button>
+      <button id="actjeremielogin">Jeremie</button>
+    </div>
+    
+    <div id="uiblocker"></div>
+  </body>
+</html>
