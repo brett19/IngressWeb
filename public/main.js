@@ -331,9 +331,7 @@ function updatePortalPanel( )
   
   $('#portalName').text( portal.portalV2.descriptiveText.TITLE );
   $('#portalAddr').text( portal.portalV2.descriptiveText.ADDRESS );
-  
-  console.log(portal);
-  
+
   for( var i = 0; i < 4; ++i ) {
     var mod = portal.portalV2.linkedModArray[i];
     if( mod ) {
