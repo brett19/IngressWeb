@@ -470,6 +470,7 @@ function doActDropX( )
     });
   }
   for( var i = 0; i < batchSize; ++i ) {
+    if( i >= dropList.length ) break;
     dropOne();
   }
 }
@@ -568,6 +569,7 @@ function doActFireX( )
     });
   }
   for( var i = 0; i < batchSize; ++i ) {
+    if( i >= dropList.length ) break;
     dropOne();
   }
 }
