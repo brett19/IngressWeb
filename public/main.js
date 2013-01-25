@@ -771,6 +771,7 @@ $(document).ready(function(){
           map: map,
           title: "Energy Glob ("+entity.quantity+")",
           icon: 'images/icon_glob.png',
+          clickable: false,
           visible: false
         });
         
@@ -833,7 +834,8 @@ $(document).ready(function(){
               map: map,
               title: "Resonator " + res.slot + " (Lvl: "+ res.level +", NRG: " + res.energyTotal + "/" + game.resonatorMaxEnergy(res.level) + ")",
               icon: resonatorIcon( res.energyTotal / game.resonatorMaxEnergy(res.level) ),
-              zIndex: 5500
+              zIndex: 5500,
+              clickable: false
             });
             
             var resLink = new google.maps.Polyline({
@@ -1239,12 +1241,14 @@ function startBot( )
 
 function _addPoiMarker( lat, lng, title )
 {
+  /*
     var waypMarker = new google.maps.Marker({
       position: new google.maps.LatLng(lat,lng),
       map: map,
       icon: 'images/icon_waypoint.png',
       title: title
     });
+  */
 }
 
 function _addPoiPath( startLat, startLng, endLat, endLng )
@@ -1256,7 +1260,11 @@ function _addPoiPath( startLat, startLng, endLat, endLng )
     ],
     strokeColor: '#FF0000',
     strokeOpacity: 0.4,
-    strokeWeight: 4
+    strokeWeight: 4,
+    icons: [{
+      icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
+      offset: '100%'
+    }]
   });
   resPath.setMap(map);
 }
