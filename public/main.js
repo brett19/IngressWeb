@@ -313,6 +313,7 @@ function setInvSelection( guid )
   if( item.resourceWithLevels ) {
     if( item.resourceWithLevels.resourceType == 'EMP_BURSTER' ) {
       $('#actfire').show();
+      $('#actfirex').show();
     }
   }
 }
@@ -351,10 +352,14 @@ function updatePortalPanel( )
     var res = portal.resonatorArray.resonators[i];
     
     if( res ) {
+      $('#res'+sidename[i]+'cur').text( res.energyTotal );
+      $('#res'+sidename[i]+'max').text( game.resonatorMaxEnergy(res.level) );
       $('#res'+sidename[i]+'lvl').text( res.level );
       $('#actdeploy'+sidename[i]).hide();
       $('#actupgrade'+sidename[i]).show();
     } else {
+      $('#res'+sidename[i]+'cur').text( '-' );
+      $('#res'+sidename[i]+'max').text( '-' );
       $('#res'+sidename[i]+'lvl').text( '-' );
       $('#actdeploy'+sidename[i]).show();
       $('#actupgrade'+sidename[i]).hide();
@@ -467,30 +472,6 @@ function doActDropX( )
   for( var i = 0; i < batchSize; ++i ) {
     dropOne();
   }
-
-  
-  /*
-  var dropLeft = totalDrop;
-  function _doDrop( ) {
-    if( dropLeft <= 0 ) {
-      nemLog( "Dropped " + totalDrop + " of the selected item." );
-      return;
-    }
-    if( !selectedInvGuid ) return;
-    
-    nemLog( "Dropping item " + selectedInvGuid );
-    
-    game.dropItem( selectedInvGuid, function(err) {
-      if( err ) return nemLog( "Item Drop Error: " + err);
-      nemLog( "Item Drop Complete." );
-      
-      dropLeft--;
-      // Allow time for inventory update
-      setTimeout( _doDrop, 500 );
-    });
-  }
-  _doDrop();
-  */
 }
 
 function doActFire( )
@@ -523,6 +504,72 @@ function doActFire( )
     
     nemLog( "XMP Firing Complete." );
   });
+}
+
+function doActFireX( )
+{
+  if( !selectedInvGuid ) return;
+  
+  var invEntities = game.getInvEntities( );
+  var startItem = invEntities[selectedInvGuid];
+  
+  var totalDrop = prompt( "How many would you like to fire?", 0 );
+  if( !totalDrop ) return;
+ 
+  nemLog( "Mass firing " + totalDrop + " of " + startItem.smallKey );
+  
+  var dropList = [];
+  for( var guid in invEntities ) {
+    var item = invEntities[guid];
+    if( item.smallKey == startItem.smallKey) {
+      dropList.push( item.guid );
+    }
+    if( dropList.length >= totalDrop ) break;
+  }
+  
+  $('#uiblocker').show();
+  var activeCnt = 0;
+  var batchSize = 10;
+  function dropOne()
+  {
+    activeCnt++;
+    var itemGuid = dropList.shift();
+    nemLog( "Firing XMP: " + itemGuid );
+    game.fireXmp( itemGuid, function(err, damages) {
+      activeCnt--;
+      if( activeCnt < batchSize && dropList.length > 0 ) {
+        dropOne();
+      } else if( activeCnt == 0 && dropList.length == 0 ) {
+        nemLog( "Mass fire completed." );
+        $('#uiblocker').hide();
+      }
+      
+      
+      if( err ) return nemLog( "XMP Fire Error: " + err);
+      
+      damages.sort(function(a,b){
+        return a.damageAmount - b.damageAmount;
+      });
+      for( var i = 0; i < damages.length; ++i ) {
+        var dmg = damages[i];
+        
+        if( dmg.targetDestroyed ) {
+          nemLog( "<b>Destroyed</b> " + resonatorDirText(dmg.targetSlot) + "</b> resonator." );
+        } else {
+          if( dmg.criticalHit ) {
+            nemLog( "Hit " + resonatorDirText(dmg.targetSlot) + " resonator for <b>" + dmg.damageAmount + "</b> damage. <i>(CRITICAL)</i>" );
+          } else {
+            nemLog( "Hit " + resonatorDirText(dmg.targetSlot) + " resonator for <b>" + dmg.damageAmount + "</b> damage." );
+          }        
+        }
+      }
+      
+      nemLog( "XMP Firing Complete." );
+    });
+  }
+  for( var i = 0; i < batchSize; ++i ) {
+    dropOne();
+  }
 }
 
 function doActLink( )
@@ -900,6 +947,7 @@ $(document).ready(function(){
   $('#actgatherxm').click(function(){doGatherXm();});
   $('#actstartbot').click(function(){startBot();});
   $('#actfire').click(function(){doActFire();});
+  $('#actfirex').click(function(){doActFireX();});
   $('#actdrop').click(function(){doActDrop();});
   $('#actdropx').click(function(){doActDropX();});
   $('#acthack').click(function(){doActHack();});
