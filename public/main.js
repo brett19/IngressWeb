@@ -1275,7 +1275,7 @@ function startBot( )
   if( !newName ) return;
   newName = newName.toLowerCase();
   
-  var botPois = botRPois[newName];
+  botPois = botRPois[newName];
   if( !botPois ) {
     nemLog("Bad name entered.");
   }
