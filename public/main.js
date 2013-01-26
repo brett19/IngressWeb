@@ -345,11 +345,13 @@ function updatePortalPanel( )
     }
   }
   
+  var portalLevel = 0;
   var sidename = [ 'e', 'ne', 'n', 'nw', 'w', 'sw', 's', 'se' ];
   for( var i = 0; i < 8; ++i ) {
     var res = portal.resonatorArray.resonators[i];
     
     if( res ) {
+      portalLevel += res.level;
       $('#res'+sidename[i]+'cur').text( res.energyTotal );
       $('#res'+sidename[i]+'max').text( game.resonatorMaxEnergy(res.level) );
       $('#res'+sidename[i]+'lvl').text( res.level );
@@ -363,6 +365,8 @@ function updatePortalPanel( )
       $('#actupgrade'+sidename[i]).hide();
     }
   }
+  
+  $('#portalLevel').text( portalLevel/8 );
 }
 
 function setPortalSelection( guid )
