@@ -201,6 +201,14 @@ function IngressGame( )
     });
   }
   
+  this.moveTimeRequired = function( startLat, startLng, endLat, endLng )
+  {
+    var targetLatLon = new LatLon(endLat, endLng);
+    var totalDistance = ((new LatLon(startLat, startLng)).distanceTo(targetLatLon) * 1000);
+    var totalTime = -0.00000050*totalDistance^2 + 0.051*totalDistance + 20;
+    return totalTime;
+  }
+  
   var playerMoveTimer = null;
   this.movePosition = function( lat, lng, done )
   {
@@ -210,7 +218,7 @@ function IngressGame( )
     
     var targetLatLon = new LatLon(lat, lng);
     var totalDistance = ((new LatLon(playerLat, playerLng)).distanceTo(targetLatLon) * 1000);
-    var totalTime = -0.00000050*totalDistance^2 + 0.051*totalDistance + 20;
+    var totalTime = this.moveTimeRequired(playerLat, playerLng, lat, lng);
     var metersPerSecond = totalDistance / totalTime;
     if( metersPerSecond < 1 ) {
       metersPerSecond = 1;

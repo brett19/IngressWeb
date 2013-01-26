@@ -654,7 +654,7 @@ function updateInventoryView( )
       smallKey = 'b:' + item.modResource.resourceType + ':' + item.modResource.rarity;
     } else if( item.resource ) {
       if( item.resource.resourceType == 'PORTAL_LINK_KEY' ) {
-        smallKey = 'c:' + item.portalCoupler.portalGuid;
+        smallKey = 'c:' + item.portalCoupler.portalTitle + ':' + item.portalCoupler.portalGuid;
       } else {
         smallKey = 'y:' + smallKeyIdx++;
       }
@@ -1027,6 +1027,40 @@ $(document).ready(function(){
 });
 
 
+
+var botPoisMoncton = [
+  [46.11179981923307,-64.77399319410324, "Elmwood Post Office" ],
+  [46.10893433141679,-64.7776772081852, "Elmwood Fire Station" ],
+  [46.10401932893482,-64.78566080331802, "University Pavillion" ],
+  [46.09744857118731,-64.77715820074081, "StGeorge Fire Station" ],
+  [46.09432751244513,-64.77451622486115, "Meeting House" ],
+  [46.08860573271043,-64.77489709854126, "Moncton Library" ],
+  [46.09312777361673,-64.75562810897827, "Circle K Post Office" ],
+  [46.09422056004332,-64.74873080849648, "Dieppe Library" ],
+  [46.061439645227935,-64.80469912290573, "Riverview"],
+  [46.0751025095715,-64.82082188129425, "Monroe" ],
+  [46.08446469874761,-64.81414318084717, "St.G Fire Station"],
+  [46.098121863436816,-64.80655252933502, "Brandon St Fire Station"],
+  [46.11247107680124,-64.84651744365692, "Hildegard Fire Station" ],
+  [46.13672569352835,-64.90158319473267, "Lutz Mountain" ]
+];
+var botPoisOuterMoncton = [
+  [46.274157785498886,-64.58143472671509, "Shediac Bridge" ],
+  [45.92807652710994,-64.6494609117508, "Hills Railroad"],
+  [45.925065303262066,-64.6438980102539, "Hills William House"],
+  [45.923067058925994,-64.64579701423645, "Hills Museum"],
+  [45.91229703665273,-64.6384584903717, "Hills Library"],
+  [45.97438101250328,-64.56548631191254, "Memeramcook Historic"],
+  [45.97641562005088,-64.56577330827713, "Memeramcook Library"],
+  [46.052055865693745,-64.07971411943436, "Port Elgin Fire Dept"],
+  [45.89653452559692,-64.3692398071289, "Sackville Public Library"],
+  [45.895756106209696,-64.3699398636818, "Sackville Post Office"],
+  [45.89132618815698,-64.37085449695587, "Sackville Heritage Center"],
+  [45.896433723701364,-64.36670243740082, "Sackville Struts Center"],
+  [45.83370883469037,-64.21322375535965, "Amherst Statues"],
+  [45.828477787163095,-64.2016875743866, "Amherst Museum"],
+  [45.826877911685074,-64.20828312635422, "Amherst Fire Station"]
+];
 var botPoisMontreal = [
   [45.523089430340846,-73.59286308288574 , ""],
   [45.519101596808646,-73.58346998691559 , ""],
@@ -1065,23 +1099,6 @@ var botPoisMontreal = [
   [45.51221900630021,-73.5688465833664 , ""],
   [45.51351214049979,-73.57719093561172 , ""],
   [45.51467743947122,-73.58508467674255 ,""]
-];
-var botPoisMoncton = [
-  [46.11179981923307,-64.77399319410324, "Elmwood Post Office" ],
-  [46.10893433141679,-64.7776772081852, "Elmwood Fire Station" ],
-  [46.10401932893482,-64.78566080331802, "University Pavillion" ],
-  [46.09744857118731,-64.77715820074081, "StGeorge Fire Station" ],
-  [46.09432751244513,-64.77451622486115, "Meeting House" ],
-  [46.08860573271043,-64.77489709854126, "Moncton Library" ],
-  [46.09312777361673,-64.75562810897827, "Circle K Post Office" ],
-  [46.09422056004332,-64.74873080849648, "Dieppe Library" ],
-  [46.061439645227935,-64.80469912290573, "Riverview"],
-  [46.0751025095715,-64.82082188129425, "Monroe" ],
-  [46.08446469874761,-64.81414318084717, "St.G Fire Station"],
-  [46.098121863436816,-64.80655252933502, "Brandon St Fire Station"],
-  [46.11247107680124,-64.84651744365692, "Hildegard Fire Station" ],
-  [46.13672569352835,-64.90158319473267, "Lutz Mountain" ],
-  [46.274157785498886,-64.58143472671509, "Shediac Bridge" ]
 ];
 var botPoisAmherst = [
   [45.89653452559692,-64.3692398071289 ], //Sackville Public Library
@@ -1123,10 +1140,19 @@ var botPoisHalifax = [
   [44.648414106173895,-63.593176156282425, "A L Arbic Consulting"],
   [44.65450670266549,-63.585613667964935, "Halifax Public Libraries"]
 ];
+var botRPois = {
+  "moncton": botPoisMoncton,
+  "outermoncton": botPoisOuterMoncton,
+  "montreal": botPoisMontreal,
+  "amherst": botPoisAmherst,
+  "amherst": botPoisHalifax
+};
+
 //var botPois = [];
 var botPois = botPoisMoncton;
 //var botPois = botPoisHalifax;
 //var botPois = botPoisMontreal;
+
 
 var botCurPoi = 0;
 
@@ -1235,6 +1261,21 @@ function stepBot( )
 
 function startBot( )
 {
+  var poiNameList = '';
+  for( var i in botRPois ) {
+    if(poiNameList!='') poiNameList += ',';
+    poiNameList += i;
+  }
+  
+  var newName = prompt("Please enter the name of the area you want to bot (" + poiNameList + ")", "");
+  if( !newName ) return;
+  newName = newName.toLowerCase();
+  
+  var botPois = botRPois[newName];
+  if( !botPois ) {
+    nemLog("Bad name entered.");
+  }
+  
   botCurPoi = 0;
   stepBot( );
 }
@@ -1261,6 +1302,7 @@ function _addPoiPath( startLat, startLng, endLat, endLng )
     strokeColor: '#FF0000',
     strokeOpacity: 0.4,
     strokeWeight: 4,
+    clickable: false,
     icons: [{
       icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
       offset: '100%'
@@ -1269,20 +1311,26 @@ function _addPoiPath( startLat, startLng, endLat, endLng )
   resPath.setMap(map);
 }
 
-
 function prepareBot( done ) 
 {
   var prevPoi = null;
-  for( var i = 0; i < botPois.length; ++i ) {
-    var botPoi = botPois[i];
-    
-    _addPoiMarker( botPoi[0], botPoi[1], "Waypoint " + i + " (" + botPoi[2] + ")" );
-    if( prevPoi ) {
-      _addPoiPath( prevPoi[0], prevPoi[1], botPoi[0], botPoi[1] );
+  for( var j in botRPois )
+  {
+    for( var i = 0; i < botRPois[j].length; ++i )
+    {
+      var botPoi = botRPois[j][i];
+      
+      _addPoiMarker( botPoi[0], botPoi[1], "Waypoint " + i + " (" + botPoi[2] + ")" );
+      if( prevPoi ) {
+        _addPoiPath( prevPoi[0], prevPoi[1], botPoi[0], botPoi[1] );
+      }
+      
+      prevPoi = botPoi;
     }
     
-    prevPoi = botPois[i];
+    prevPoi = null;
   }
+
   done();
 }
 
