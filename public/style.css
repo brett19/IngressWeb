@@ -46,6 +46,12 @@ h3 {
   left: 315px;
   width: 80px;
 }
+#actgatheritems {
+  position: absolute;
+  top: 5px;
+  left: 205px;
+  width: 100px;
+}
 
 #inventory {
   position: absolute;

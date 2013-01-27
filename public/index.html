@@ -14,11 +14,12 @@
     <div id="map_canvas"></div>
     <div id="playerInfo">
       <h3>Player Info</h3><br />
-      <b>Name: </b><span id="playerName"></span><br />
-      <b>AP: </b><span id="playerAp"></span><br />
-      <b>Energy: </b><span id="playerEnergy"></span>
+      <b>Name: </b><span id="playerName">?</span> [L<span id="playerLvl">?</span> |<span id="playerCLvl">?</span>:<span id="playerRCLvl">?</span>]<br />
+      <b>AP: </b><span id="playerAp">?</span> / <span id="playerLvlAp">?</span> (<span id="playerLvlPer">?</span>%)<br />
+      <b>Energy: </b><span id="playerXm">?</span> / <span id="playerMaxXm">?</span> (<span id="playerXmState">?</span>)
       <button id="actstartbot">Start Bot</button>
       <button id="actgatherxm">Gather XM</button>
+      <button id="actgatheritems">Gather Items</button>
     </div>
     <div id="inventory">
       <h3>Inventory</h3> (<span id="invTotal">?</span> Total)<br />
@@ -130,13 +131,15 @@
       Username: <input type="text" id="login_username" /><br />
       Password: <input type="password" id="login_password" /><br />
       <button id="actuplogin">User Login</button><br />
-      <br />
+      <br /><hr /><br />
       Auth Token: <input type="text" id="login_authtoken"><br />
       <button id="actauthlogin">Token Login</button><br />
-      <br /><br />
-      <button id="actbrettlogin">Brett</button>
-      <button id="actchrislogin">Chris</button>
-      <button id="actjeremielogin">Jeremie</button>
+      <br /><hr /><br />
+      <button id="actceriuslogin">Cerius</button>
+      <button id="actvulpixlogin">Vulpix</button>
+      <button id="actbeliviouslogin">Belivious</button>
+      <button id="actshampowlogin">Shampow</button><br /><br />
+      <button id="actcontestedlogin">Contested</button>
     </div>
     
     <div id="uiblocker"></div>

@@ -383,6 +383,58 @@ function pickupItem( itemGuid )
   });
 }
 
+function doGatherItems( )
+{
+  if( !confirm("Are you sure you want to gather items?  This will move you!") ) {
+    return;
+  }
+  
+  nemLog( "Gathering Items..." );
+  
+  var entities = game.getGameEntities();
+  var pickupList = [];
+  for( var guid in entities ) {
+    var entity = entities[guid];
+    if( entity.portalV2 || entity.edge || entity.capturedRegion ) {
+      // Wrong kind of entity
+      continue;
+    }
+    
+    var location = fromLocationE6(entity.locationE6);
+    if( _distanceTo(location.lat, location.lng) < game.myActionRange() ) {
+      pickupList.push(guid);
+    }
+  }
+  
+  if( pickupList.length <= 0 ) return;
+  
+  $('#uiblocker').show();
+  var activeCnt = 0;
+  var batchSize = 10;
+  function pickupOne()
+  {
+    activeCnt++;
+    var itemGuid = pickupList.shift();
+    nemLog( "Picking up item " + itemGuid );
+    game.pickupItem( itemGuid, function(err) {
+      activeCnt--;
+      if( activeCnt < batchSize && pickupList.length > 0 ) {
+        pickupOne();
+      } else if( activeCnt == 0 && pickupList.length == 0 ) {
+        nemLog( "Item gather completed." );
+        $('#uiblocker').hide();
+      }
+      if( err ) return nemLog( "Item Pickup Error: " + err);
+      nemLog( "Item Pickup Complete." );
+    });
+  }
+  for( var i = 0; i < batchSize; ++i ) {
+    if( i >= pickupList.length ) break;
+    pickupOne();
+  }
+}
+
+
 function doGatherXm( )
 {
   nemLog( "Gathering Energy..." );
@@ -450,6 +502,8 @@ function doActDropX( )
     }
     if( dropList.length >= totalDrop ) break;
   }
+  
+  if( dropList.length <= 0 ) return;
   
   $('#uiblocker').show();
   var activeCnt = 0;
@@ -529,6 +583,8 @@ function doActFireX( )
     }
     if( dropList.length >= totalDrop ) break;
   }
+  
+  if( dropList.length <= 0 ) return;
   
   $('#uiblocker').show();
   var activeCnt = 0;
@@ -764,7 +820,14 @@ $(document).ready(function(){
     document.title = 'HTML5 Ingress - ' + game.getPlayerName();
     $('#playerName').text( game.getPlayerName() );
     $('#playerAp').text( game.getPlayerEntity().playerPersonal.ap );
-    $('#playerEnergy').text( game.getPlayerEntity().playerPersonal.energy + " (" + game.getPlayerEntity().playerPersonal.energyState + ")" );
+    $('#playerLvlAp').text( game.myNextLevelAp() );
+    $('#playerLvlPer').text( game.myNextLevelPer() );
+    $('#playerLvl').text( game.myLevel() );
+    $('#playerCLvl').text( game.getPlayerEntity().playerPersonal.clientLevel );
+    $('#playerRCLvl').text( game.myClientLevel() );
+    $('#playerXm').text( game.getPlayerEntity().playerPersonal.energy );
+    $('#playerMaxXm').text( game.myMaxEnergy() );
+    $('#playerXmState').text( game.getPlayerEntity().playerPersonal.energyState );
   };
   
   game.onGlobEntityChanged = function( entity, removed ) {
@@ -951,6 +1014,7 @@ $(document).ready(function(){
   }
   
   $('#actgatherxm').click(function(){doGatherXm();});
+  $('#actgatheritems').click(function(){doGatherItems();});
   $('#actstartbot').click(function(){startBot();});
   $('#actfire').click(function(){doActFire();});
   $('#actfirex').click(function(){doActFireX();});
@@ -995,6 +1059,12 @@ $(document).ready(function(){
       var startLocation = [ 46.11822756499197,-64.7482681274414 ];
       game.setPosition( startLocation[0], startLocation[1] );
       
+      /* Lets not waste bandwidth now...
+      setInterval(function(){
+        game.updateMyRegion(function(){});
+      }, 10000);
+      */
+     
       nemLog( 'Updating Region...' );
       game.updateRegion( startLocation[0], startLocation[1], function(err) {
         nemLog( 'Region Loaded!' );
@@ -1019,14 +1089,20 @@ $(document).ready(function(){
     handleLogin( null, null, $('#login_authtoken').val() );
   });
   
-  $('#actbrettlogin').click(function(){
+  $('#actceriuslogin').click(function(){
     handleLogin( null, null, 'DQAAAMMAAAD6ySlixAyFt2zwKY7bwIT4X5m4MYScUc1PYyMLKHuJz3oJncvLoUuV_8RqJMTNmi9pq87pVwB_RVIX60TqqrXWeq4hrDZnvEaTMqRLm6ARagn6hSuJi28hFt8DRIII0kN10DYqhgBb3vPMnLfoOna--hw47TYUGYmjPMNLpiPE2j1AfPY8oslQ2LMzT-umP-qCuo786VpSclAQFMWqotQu-kKwyJBtZ6NoQLOirJkyyyO3PP1iESXn6lNS-6yqAXfK_6Zy755hQQN_5psnQ5ZA', null );
   });
-  $('#actchrislogin').click(function(){
+  $('#actvulpixlogin').click(function(){
     handleLogin( null, null, 'DQAAAMIAAACkxwdmleP8IvVm8-OvaKkEZ1Qdfwc1-6uGrvRihGtJzIGRFBoWwJrvZd5GbrSTI4EiR7SF7qHpLNIidJ4svoHFtQAlUkmyf_5MTZfo9_DqmUMK_4D6SNBGKprL5LdrPpNwyetCvN-OGyqaoAop-OfPeT10fxbd9c4OCbLqzRxq7lrIt9SkuPyBsH3sWgQ_Opu6Ric6ArR77jQM2MSuHFFInUivD24pB95N1BJhvZHaACsCu_76wgD0knGXLyhU5CVy9JAF21N7G2oED4HfQAGU' );
   });
-  $('#actjeremielogin').click(function(){
+  $('#actcontestedlogin').click(function(){
     handleLogin( null, null, 'DQAAAMsAAACy-i3nes19QjBg7xUYyEI5n5vrvP5Jp_mV8kb0I9AtCNBJ0YDR_yrK-CGgEqntZuTcx-u_HQdEQ4LBPe1c2Zgpw8T8k8tDsMuxcTNF8Po4a4AKLTZS8W_WRvFxxJXhXIkiVEFEBF4pl-nw-DjSOlxNMJ3PMvCKSQQacr1ERwvCIfCSdkmposWpGX09XxojNsJncdJT6usvr6uar0qWAdFECnzNfVFXemED0v5aLYUMRl7m3NrqK5cHt9xjXG578gqNcINzux6qmGGsqdh2pMWr' );
+  });
+  $('#actbeliviouslogin').click(function(){
+    handleLogin( null, null, 'DQAAAL0AAADHLy0pH850TwKGgSc9Q7vrFZwT15kZLa5r-ZGsqoUIuZ_92C9RMUSul1qK3kAx9dz5cZQSXnQJFV8_wR4QbEtMlSR-NNsmVFgwi7h5l8iJJkTAPrF8Kcc-iUz3X4aQ4vZv0LBu4TLVW2rc7ycq8-qusOjW-ILmXeWj0IspeDdU9c2XGyBP-AlOXfoY5q-tvVCgwP50e_VJAYimsz1hGfNcVfJ3b0orMqgM-ple-tTxIrXL_wvDlFyrlQEfUzemJBE' );
+  });
+  $('#actshampowlogin').click(function(){
+    handleLogin( null, null, 'DQAAALYAAAABQqaBEA9ZZXEDqOdvUF4HnsCwFVmjVxcCHJ6Av-fyZvRcYcMyBtn4kBPoTDdLkEJZNux-andOerDWFcyaKN19_DnDBSloZcPcKX4PKtBa1tAy2vV8nSUrNA8FYhpE8YED0WPIINt5SQ6VLwWzkAEzLim0fi4UWFAyuTS57VvuD-mEszTmSH5QMDYOhVCYmURD2X4DerELAVyyiaPpACBOVIiC4KePw6ADZ1vKz5bSi8MAUMsbCdE9pVp2_fbPS-s' );
   });
 });
 
@@ -1041,7 +1117,8 @@ var botPoisMoncton = [
   [46.08860573271043,-64.77489709854126, "Moncton Library" ],
   [46.09312777361673,-64.75562810897827, "Circle K Post Office" ],
   [46.09422056004332,-64.74873080849648, "Dieppe Library" ],
-  [46.061439645227935,-64.80469912290573, "Riverview"],
+  [46.060795683949884,-64.804025888443, "Riverview South"],
+  [46.0613577546152,-64.80435311794281, "Riverview North"],
   [46.0751025095715,-64.82082188129425, "Monroe" ],
   [46.08446469874761,-64.81414318084717, "St.G Fire Station"],
   [46.098121863436816,-64.80655252933502, "Brandon St Fire Station"],

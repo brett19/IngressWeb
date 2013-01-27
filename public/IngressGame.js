@@ -270,9 +270,27 @@ function IngressGame( )
       done();
     });
   }
+
+  var lastLevelUp = 0;
+  this.checkLevelUp = function( ) {
+    var curClientLevel = playerEntity.playerPersonal.clientLevel;
+    if( this.myClientLevel() > curClientLevel ) {
+      if( lastLevelUp < curClientLevel ) {
+        this.levelUp(curClientLevel, function(){});        
+        lastLevelUp = curClientLevel;
+      }
+    }
+  }
+  
+  this.updateMyRegion = function( done )
+  {
+    this.updateRegion( playerLat, playerLng, done );
+  }
   
   this.updateRegion = function( lat, lng, done )
   {
+    var _classThis = this;
+    
     client.getCellsInRange( lat, lng, cellLoadRecursion, function(nearCells) {
       timeList = [];
       for( var i = 0; i < nearCells.length; ++i ) {
@@ -294,6 +312,10 @@ function IngressGame( )
         if(err) return done(err);
         _handleGameBasket(data.gameBasket);
         if(data.error) return done(data.error);
+        
+        // Whenever we get a region, check level up stuff
+        // Coupled with automatic region updates, this works good
+        _classThis.checkLevelUp( );
         
         /* Full request every time
         for(var i = 0; i < nearCells.length; ++i) {
@@ -361,6 +383,18 @@ function IngressGame( )
       "playerLocation":_playerLocationE6()
     }, function(err, data) {
       if(err) return done(err);      
+      _handleGameBasket(data.gameBasket);
+      if(data.error) return done(data.error);
+      
+      done(null);
+    });
+  }
+  
+  this.levelUp = function( level, done )
+  {
+    client.doRpc( 'player', 'levelUp', [
+      level
+    ], function(err, data) {
       _handleGameBasket(data.gameBasket);
       if(data.error) return done(data.error);
       
@@ -485,24 +519,43 @@ function IngressGame( )
     return maxEnergy[level];
   }
   
-  this.myLevel = function() {
-    if( playerEntity.playerPersonal.ap < 10000 ) {
-      return 1;
-    } else if( playerEntity.playerPersonal.ap < 30000 ) {
-      return 2;
-    } else if( playerEntity.playerPersonal.ap < 70000 ) {
-      return 3;
-    } else if( playerEntity.playerPersonal.ap < 150000 ) {
-      return 4;
-    } else if( playerEntity.playerPersonal.ap < 300000 ) {
-      return 5;
-    } else if( playerEntity.playerPersonal.ap < 600000 ) {
-      return 6;
-    } else if( playerEntity.playerPersonal.ap < 1200000 ) {
-      return 7;
-    } else {
-      return 8;
+  var clientLevelList = [0, 2000, 4000, 6000, 8000, 10000, 14000, 18000, 22000, 26000, 30000,
+    38000, 46000, 54000, 62000, 70000, 86000, 102000, 118000, 134000, 150000,
+    180000, 210000, 240000, 270000, 300000, 360000, 420000, 480000, 540000, 
+    600000, 720000, 840000, 960000, 1080000, 1200000, 9223372036854775807 ];
+  var accessLevelList = [0, 10000, 30000, 70000, 150000, 300000, 600000, 1200000 ];
+  
+  this.myClientLevel = function() {
+    for( var i = 0; i < clientLevelList.length; ++i ) {
+      if( playerEntity.playerPersonal.ap < clientLevelList[i] ) {
+        return i;
+      }
     }
+    return 0;
+  }
+  
+  this.myLevel = function() {
+    for( var i = 0; i < accessLevelList.length; ++i ) {
+      if( playerEntity.playerPersonal.ap < accessLevelList[i] ) {
+        return i;
+      }
+    }
+    return 0;
+  }
+  
+  this.myPrevLevelAp = function() {
+    return accessLevelList[ this.myLevel() - 1 ];
+  }
+  
+  this.myNextLevelAp = function() {
+    return accessLevelList[ this.myLevel() ];
+  }
+  
+  this.myNextLevelPer = function() {
+    var curAp = playerEntity.playerPersonal.ap;
+    var prevAp = this.myPrevLevelAp();
+    var nextAp = this.myNextLevelAp();
+    return Math.round( (curAp-prevAp) / (nextAp-prevAp) * 100 );
   }
   
   this.myActionRange = function( ) {
