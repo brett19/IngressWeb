@@ -1127,7 +1127,8 @@ var botPoisMoncton = [
 ];
 var botPoisOuterMoncton = [
   [46.274157785498886,-64.58143472671509, "Shediac Bridge" ],
-  [46.052055865693745,-64.07971411943436, "Port Elgin Fire Dept"],
+  [46.07120702116117,-64.10993725061417, "Port Elgin Fire North"],
+  [46.052055865693745,-64.07971411943436, "Port Elgin Fire South"],
   [45.83370883469037,-64.21322375535965, "Amherst Statues"],
   [45.828477787163095,-64.2016875743866, "Amherst Museum"],
   [45.826877911685074,-64.20828312635422, "Amherst Fire Station"],
