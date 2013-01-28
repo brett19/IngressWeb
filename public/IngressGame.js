@@ -277,7 +277,7 @@ function IngressGame( )
     if( this.myClientLevel() > curClientLevel ) {
       if( lastLevelUp < curClientLevel ) {
         this.levelUp(curClientLevel, function(){});        
-        lastLevelUp = curClientLevel;
+        //lastLevelUp = curClientLevel;
       }
     }
   }
