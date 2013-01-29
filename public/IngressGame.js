@@ -473,6 +473,42 @@ function IngressGame( )
     });
   }
   
+  this.rechargeResonators = function( portalGuid, slots, done )
+  {
+    client.doRpc( 'gameplay', 'rechargeResonatorsV2', {          
+      "resonatorSlots": slots,
+      "portalGuid": portalGuid,
+      "portalKeyGuid": null,
+      "location":_playerLocationE6(),
+      "energyGlobGuids":[],
+      "knobSyncTimestamp":lastKnobTimestamp
+    }, function(err, data) {
+      if(err) return done(err);      
+      _handleGameBasket(data.gameBasket);
+      if(data.error) return done(data.error);
+      
+      done(null);
+    });
+  }
+  
+  this.remoteRechargeResonators = function( portalKeyGuid, slots, done )
+  {
+    client.doRpc( 'gameplay', 'remoteRechargeResonatorsV2', {          
+      "resonatorSlots": slots,
+      "portalGuid": null,
+      "portalKeyGuid": portalKeyGuid,
+      "location":_playerLocationE6(),
+      "energyGlobGuids":[],
+      "knobSyncTimestamp":lastKnobTimestamp
+    }, function(err, data) {
+      if(err) return done(err);      
+      _handleGameBasket(data.gameBasket);
+      if(data.error) return done(data.error);
+      
+      done(null);
+    });
+  }
+  
   this.upgradeResonator = function( portalGuid, itemGuid, slot, done )
   {
     client.doRpc( 'gameplay', 'upgradeResonatorV2', {          

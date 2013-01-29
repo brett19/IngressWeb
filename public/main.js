@@ -664,6 +664,19 @@ function doActAddShield( slot )
   });
 }
 
+function doActRecharge( )
+{
+  if( !selectedPortalGuid ) return;
+  
+  nemLog( "Recharging portal " + selectedPortalGuid );
+  
+  game.rechargeResonators( selectedPortalGuid, [0,1,2,3,4,5,6,7], function(err) {
+    if( err ) return nemLog( "Resonator Recharge Error: " + err);
+    
+    nemLog( "Resonator Recharge Complete." );
+  });
+}
+
 function doActDeploy( slot )
 {
   if( !selectedInvGuid ) return;
@@ -1016,6 +1029,8 @@ $(document).ready(function(){
   $('#actgatherxm').click(function(){doGatherXm();});
   $('#actgatheritems').click(function(){doGatherItems();});
   $('#actstartbot').click(function(){startBot();});
+  $('#actrrecharge').click(function(){DoActRRecharge();});
+  $('#actrecharge').click(function(){doActRecharge();});
   $('#actfire').click(function(){doActFire();});
   $('#actfirex').click(function(){doActFireX();});
   $('#actdrop').click(function(){doActDrop();});
