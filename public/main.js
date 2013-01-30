@@ -17,6 +17,13 @@ function _distanceTo( lat, lng )
 }
 
 
+var iconGroundItem = new google.maps.MarkerImage(
+    'images/icon_item_unknown.png',
+    null, /* size is determined at runtime */
+    null, /* origin is 0,0 */
+    new google.maps.Point(10, 10),
+    new google.maps.Size(20, 20)
+);
 var iconPortalEnlFake = new google.maps.MarkerImage(
     "images/icon_portal_enl_fake.png",
     null, /* size is determined at runtime */
@@ -887,13 +894,24 @@ $(document).ready(function(){
         destroyFakePortal( entity );
         var location = fromLocationE6(entity.locationE6);
       
-        entity.dispPortal = new google.maps.Marker({
-          position: new google.maps.LatLng(location.lat, location.lng),
-          map: map,
-          title: entity.portalV2.descriptiveText.TITLE + " (" + entity.controllingTeam.team + ")",
-          icon: teamPortalIcon(entity.controllingTeam.team),
-          zIndex: 10000
-        });
+        if( !viewOptimization ) {
+          entity.dispPortal = new google.maps.Marker({
+            position: new google.maps.LatLng(location.lat, location.lng),
+            map: map,
+            title: entity.portalV2.descriptiveText.TITLE + " (" + entity.controllingTeam.team + ")",
+            icon: teamPortalIcon(entity.controllingTeam.team),
+            zIndex: 10000
+          });
+        } else {
+          entity.dispPortal = new google.maps.Marker({
+            position: new google.maps.LatLng(location.lat, location.lng),
+            map: map,
+            title: entity.portalV2.descriptiveText.TITLE + " (" + entity.controllingTeam.team + ")",
+            icon: teamFakePortalIcon(entity.controllingTeam.team),
+            zIndex: 10000
+          });
+        }
+        
         entity.dispRess = [];
         entity.dispResLinks = [];
         
@@ -955,72 +973,78 @@ $(document).ready(function(){
         createFakePortal( entity );
       }
     } else if( entity.edge ) {
-      if( !removed ) {
-        var originLocation = fromLocationE6(entity.edge.originPortalLocation);
-        var destinationLocation = fromLocationE6(entity.edge.destinationPortalLocation);
-       
-        entity.dispEdge = new google.maps.Polyline({
-          path: [
-            new google.maps.LatLng(originLocation.lat,originLocation.lng),
-            new google.maps.LatLng(destinationLocation.lat,destinationLocation.lng)
-          ],
-          clickable: false,
-          strokeColor: teamColor(entity.controllingTeam.team),
-          strokeOpacity: 0.7,
-          strokeWeight: 2,
-          zIndex: -10000
-        });
-        entity.dispEdge.setMap(map);
-      } else {
-        if( entity.dispEdge ) {
-          entity.dispEdge.setMap(null);
-          entity.dispEdge = null;
+      if( !viewOptimization ) {
+        if( !removed ) {
+          var originLocation = fromLocationE6(entity.edge.originPortalLocation);
+          var destinationLocation = fromLocationE6(entity.edge.destinationPortalLocation);
+         
+          entity.dispEdge = new google.maps.Polyline({
+            path: [
+              new google.maps.LatLng(originLocation.lat,originLocation.lng),
+              new google.maps.LatLng(destinationLocation.lat,destinationLocation.lng)
+            ],
+            clickable: false,
+            strokeColor: teamColor(entity.controllingTeam.team),
+            strokeOpacity: 0.7,
+            strokeWeight: 2,
+            zIndex: -10000
+          });
+          entity.dispEdge.setMap(map);
+        } else {
+          if( entity.dispEdge ) {
+            entity.dispEdge.setMap(null);
+            entity.dispEdge = null;
+          }
         }
       }
     } else if( entity.capturedRegion ) {
-      if( !removed ) {
-        var vertexA = fromLocationE6(entity.capturedRegion.vertexA.location);
-        var vertexB = fromLocationE6(entity.capturedRegion.vertexB.location);
-        var vertexC = fromLocationE6(entity.capturedRegion.vertexC.location);
-        
-        entity.dispField = new google.maps.Polygon({
-          paths: [
-            new google.maps.LatLng(vertexA.lat,vertexA.lng),
-            new google.maps.LatLng(vertexB.lat,vertexB.lng),
-            new google.maps.LatLng(vertexC.lat,vertexC.lng)
-          ],
-          strokeOpacity: 0.0,
-          fillColor: teamColor(entity.controllingTeam.team),
-          fillOpacity: 0.10,
-          clickable: false,
-          zIndex: -10000
-        });
-        entity.dispField.setMap(map);
-      } else {
-        if( entity.dispField ) {
-          entity.dispField.setMap(null);
-          entity.dispField = null;
+      if( !viewOptimization ) {
+        if( !removed ) {
+          var vertexA = fromLocationE6(entity.capturedRegion.vertexA.location);
+          var vertexB = fromLocationE6(entity.capturedRegion.vertexB.location);
+          var vertexC = fromLocationE6(entity.capturedRegion.vertexC.location);
+          
+          entity.dispField = new google.maps.Polygon({
+            paths: [
+              new google.maps.LatLng(vertexA.lat,vertexA.lng),
+              new google.maps.LatLng(vertexB.lat,vertexB.lng),
+              new google.maps.LatLng(vertexC.lat,vertexC.lng)
+            ],
+            strokeOpacity: 0.0,
+            fillColor: teamColor(entity.controllingTeam.team),
+            fillOpacity: 0.10,
+            clickable: false,
+            zIndex: -10000
+          });
+          entity.dispField.setMap(map);
+        } else {
+          if( entity.dispField ) {
+            entity.dispField.setMap(null);
+            entity.dispField = null;
+          }
         }
       }
     } else {
-      if( !removed ) {
-        var location = fromLocationE6(entity.locationE6);
-      
-        entity.dispItem = new google.maps.Marker({
-          position: new google.maps.LatLng(location.lat, location.lng),
-          map: map,
-          title: "Item - " + itemText(entity),
-          icon: 'images/icon_item_unknown.png',
-          zIndex: 10000
-        });
+      if( !viewOptimization ) {
+        if( !removed ) {
+          var location = fromLocationE6(entity.locationE6);
         
-        google.maps.event.addListener(entity.dispItem, 'click', function(e) {
-          pickupItem( entity.guid );
-        });
-      } else {
-        if( entity.dispItem ) {
-          entity.dispItem.setMap(null);
-          entity.dispItem = null;
+          entity.dispItem = new google.maps.Marker({
+            position: new google.maps.LatLng(location.lat, location.lng),
+            map: map,
+            title: "Item - " + itemText(entity),
+            icon: iconGroundItem,
+            zIndex: 10000
+          });
+          
+          google.maps.event.addListener(entity.dispItem, 'click', function(e) {
+            pickupItem( entity.guid );
+          });
+        } else {
+          if( entity.dispItem ) {
+            entity.dispItem.setMap(null);
+            entity.dispItem = null;
+          }
         }
       }
     }
@@ -1062,6 +1086,8 @@ $(document).ready(function(){
   
   function handleLogin( email, password, authToken )
   {
+    viewOptimization = $('#simple_mode').val();
+    
     nemLog( 'Logging in...' );
     $('#loginform').hide();
     
