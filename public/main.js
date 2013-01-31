@@ -1086,7 +1086,7 @@ $(document).ready(function(){
   
   function handleLogin( email, password, authToken )
   {
-    viewOptimization = $('#simple_mode').val();
+    viewOptimization = $('#simple_mode').is(':checked');
     
     nemLog( 'Logging in...' );
     $('#loginform').hide();
