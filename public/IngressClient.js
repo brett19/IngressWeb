@@ -133,7 +133,7 @@ function IngressClient( )
       contentType: 'application/json;charset=UTF-8',
       dataType: 'json',
       data: {
-        "nemesisSoftwareVersion": "2013-01-15T22:12:53Z ae145d098fc5 opt",
+        "nemesisSoftwareVersion": "2013-01-24T11:26:38Z bfb6a817656f opt",
         "deviceSoftwareVersion": "4.2.1"
       },
       success: function(data, statusCode) {
