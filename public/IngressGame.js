@@ -390,6 +390,19 @@ function IngressGame( )
     });
   }
   
+  this.redeemReward = function( code, done )
+  {
+    client.doRpc( 'playerUndecorated', 'redeemReward', [
+      code
+    ], function(err, data) {
+      _handleGameBasket(data.gameBasket);
+      if(data.error) return done(data.error);
+      
+      done(null, data.result);
+    });
+  }
+  
+  
   this.levelUp = function( level, done )
   {
     client.doRpc( 'player', 'levelUp', [

@@ -793,6 +793,37 @@ function updateInventoryView( )
   console.log('Inventory View Update Complete.');
 }
 
+function doPasscode( code, done )
+{
+  nemLog( "Redeeming Code `" + code + "`");
+  game.redeemReward(code, function(err, result){
+    done();
+    
+    if( err ) return nemLog( "Redeem Error: " + err);
+    
+    nemLog( "Reward Base: " + result.apAward + "ap, " + result.xmAward + "xm.");
+    for( var i = 0; i < result.inventoryAward.length; ++i ) {
+      var itam = result.inventoryAward[i][2];
+      nemLog( "Reward Item: " + itemText(itam) );
+    }
+    
+    nemLog( "Redeem Complete." );
+  });
+}
+//ADU34xx,GAH80xx,HZZ7691,FYD46xx,6SNU700
+function doReward( )
+{
+  var i = 100;
+  function doOne() {
+    doPasscode( '' + i + 'NY3', function(){
+      i++;
+      doOne();
+    });
+  }
+  doOne();
+  //doPasscode(prompt("Enter a passcode!"));
+}
+
 var fakePortals = {};
 function createFakePortal( entity )
 {
@@ -1048,6 +1079,7 @@ $(document).ready(function(){
     }
   }
   
+  $('#reward').click(function(){doReward();});
   $('#actgatherxm').click(function(){doGatherXm();});
   $('#actgatheritems').click(function(){doGatherItems();});
   $('#actstartbot').click(function(){startBot();});
@@ -1095,7 +1127,7 @@ $(document).ready(function(){
       nemLog( 'Logged in.' );
       $('#uiblocker').hide();
      
-      var startLocation = [ 44.64714704048417,-63.57113242149353 ];
+      var startLocation = [ 46.11888201136747,-64.74869728088379 ];
       game.setPosition( startLocation[0], startLocation[1] );
       
       /* Lets not waste bandwidth now...
