@@ -973,28 +973,26 @@ $(document).ready(function(){
         createFakePortal( entity );
       }
     } else if( entity.edge ) {
-      if( !viewOptimization ) {
-        if( !removed ) {
-          var originLocation = fromLocationE6(entity.edge.originPortalLocation);
-          var destinationLocation = fromLocationE6(entity.edge.destinationPortalLocation);
-         
-          entity.dispEdge = new google.maps.Polyline({
-            path: [
-              new google.maps.LatLng(originLocation.lat,originLocation.lng),
-              new google.maps.LatLng(destinationLocation.lat,destinationLocation.lng)
-            ],
-            clickable: false,
-            strokeColor: teamColor(entity.controllingTeam.team),
-            strokeOpacity: 0.7,
-            strokeWeight: 2,
-            zIndex: -10000
-          });
-          entity.dispEdge.setMap(map);
-        } else {
-          if( entity.dispEdge ) {
-            entity.dispEdge.setMap(null);
-            entity.dispEdge = null;
-          }
+      if( !removed ) {
+        var originLocation = fromLocationE6(entity.edge.originPortalLocation);
+        var destinationLocation = fromLocationE6(entity.edge.destinationPortalLocation);
+       
+        entity.dispEdge = new google.maps.Polyline({
+          path: [
+            new google.maps.LatLng(originLocation.lat,originLocation.lng),
+            new google.maps.LatLng(destinationLocation.lat,destinationLocation.lng)
+          ],
+          clickable: false,
+          strokeColor: teamColor(entity.controllingTeam.team),
+          strokeOpacity: 0.7,
+          strokeWeight: 2,
+          zIndex: -10000
+        });
+        entity.dispEdge.setMap(map);
+      } else {
+        if( entity.dispEdge ) {
+          entity.dispEdge.setMap(null);
+          entity.dispEdge = null;
         }
       }
     } else if( entity.capturedRegion ) {
@@ -1097,7 +1095,7 @@ $(document).ready(function(){
       nemLog( 'Logged in.' );
       $('#uiblocker').hide();
      
-      var startLocation = [ 46.11822756499197,-64.7482681274414 ];
+      var startLocation = [ 44.64714704048417,-63.57113242149353 ];
       game.setPosition( startLocation[0], startLocation[1] );
       
       /* Lets not waste bandwidth now...
@@ -1155,9 +1153,10 @@ var botPoisMoncton = [
   [46.10401932893482,-64.78566080331802, "University Pavillion" ],
   [46.09744857118731,-64.77715820074081, "StGeorge Fire Station" ],
   [46.09432751244513,-64.77451622486115, "Meeting House" ],
-  [46.08860573271043,-64.77489709854126, "Moncton Library" ],
-  [46.09312777361673,-64.75562810897827, "Circle K Post Office" ],
   [46.09422056004332,-64.74873080849648, "Dieppe Library" ],
+  [46.09312777361673,-64.75562810897827, "Circle K Post Office" ],
+  [46.08860573271043,-64.77489709854126, "Moncton Library" ],
+  [46.087586315637715,-64.78146851062775, "Subway"],
   [46.060795683949884,-64.804025888443, "Riverview South"],
   [46.0613577546152,-64.80435311794281, "Riverview North"],
   [46.0751025095715,-64.82082188129425, "Monroe" ],
@@ -1236,42 +1235,58 @@ var botPoisAmherst = [
   [45.826877911685074,-64.20828312635422 ] //Amherst Fire Station
 ];
 var botPoisHalifax = [
+  [44.648036279240884,-63.57534348964691, "Sports Hall of Fame" ],
+  [44.64886444213166,-63.575241565704346, "Departement of Agriculture"],
+  [44.650181082291816,-63.571902215480804, "Nathan Green Square"],
   [44.64955520489916,-63.571770787239075, "Halifax Ferry Terminal" ],
-  [44.64864261394536,-63.572975769639015, "Conserve Nova Scotia" ],
   [44.64907338919577,-63.572232127189636, "Nova Scotian Crystal" ],
+  [44.64864261394536,-63.572975769639015, "Conserve Nova Scotia" ],
   [44.648077306021904,-63.57305824756622, "Nova Scotia Dept of Finance" ],
   [44.64745999301751,-63.57331842184067, "Nova Scotia Sports Heritage" ],
   [44.64657837851064,-63.573734164237976, "Center for Arts Tapes" ],
   [44.64597154515536,-63.57345521450043, "Eye Level Gallery" ],
   [44.64715467349288,-63.57191026210785, "Museum of Industry" ],
   [44.64760883570309,-63.57139527797699, "HMCS Sackville" ],
-  [44.646796875129745,-63.57006087899208, "Museum of the Atlantic" ],
   [44.64677015943008,-63.57093930244446, "Halifax, Nova Scotia - Sailor Statue" ],
   [44.647269168502945,-63.57032507658005, "Halifax Waterfront Playground" ],
+  [44.646796875129745,-63.57006087899208, "Museum of the Atlantic" ],
+  [44.6438036861035,-63.56865406036377, "Mermaid Statue" ],
   [44.64112619202914,-63.56666386127472, "Samuel Cunard Statue" ],
   [44.63875012267429,-63.56571167707443, "Mary E Black Gallery" ],
   [44.63824340613963,-63.56545686721802, "Canadian Museum of Integration" ],
   [44.63984560770313,-63.56955528259277, "Cornwallis Park" ],
   [44.643563231956975,-63.57221066951752, "Welsford Parker Memorial" ],
   [44.64400978886442,-63.5745495557785, "Memorial Library"],
+  [44.64728061799153,-63.58055770397186, "Citadel Hill"],
+  [44.64726153550931,-63.58465075492859, "Citadel High School"],
+  [44.64550592028923,-63.585251569747925, "Sutherland Steam"],
+  [44.64458038435501,-63.58506917953491, "Heritage Divison"],
+  [44.642620489419635,-63.5788357257843, "Office of Ombudsman"],
+  [44.64103649479273,-63.57913613319397, "Sir Walter Scott"],
   [44.63766988547646,-63.57495725154877, "Post Office" ],
   [44.63130256648321,-63.582099974155426, "Saint Mary's Uni" ],
+  [44.639037355505614,-63.588554710149765, "Camus Productions"],
+  [44.63652091854213,-63.59208583831787, "DAL"],
   [44.63527267951139,-63.59564244747162, "Thomas Museum" ],
   [44.63804014572116,-63.60386610031128, "St. Marys Boat Club"], 
   [44.64068152139048,-63.594473004341125, "Royal NS Museum"],
-  [44.639037355505614,-63.588554710149765, "Camus Productions"],
-  [44.642620489419635,-63.5788357257843, "Office of Ombudsman"],
-  [44.64458038435501,-63.58506917953491, "Heritage Divison"],
-  [44.645475864457374,-63.585545271635056, "Sutherland Steam Museum"],
   [44.648414106173895,-63.593176156282425, "A L Arbic Consulting"],
-  [44.65450670266549,-63.585613667964935, "Halifax Public Libraries"]
+  [44.65342866689854,-63.58416795730591, "Lawrence House"],
+  [44.65450670266549,-63.585613667964935, "Halifax Public Libraries"],
+  [44.65898462963728,-63.593518137931824, "Maritime Command Museum"],
+  [44.66974016254162,-63.57749730348587, "MacDonald Bridge Memorial"],
+  [44.67107921831751,-63.57574850320816, "Metro Transit Bridge Terminal"],
+  [44.67176017925971,-63.57184857130051, "Dartmouth High"],
+  [44.668931373127144,-63.57531130313873, "Dartmouth Sportsplex"],
+  [44.66640574108456,-63.56718957424164, "Dartmouth Post Office"],
+  [44.666684252735465,-63.55992078781128, "Evergreen Green House"]
 ];
 var botRPois = {
   "moncton": botPoisMoncton,
   "outermoncton": botPoisOuterMoncton,
   "montreal": botPoisMontreal,
   "amherst": botPoisAmherst,
-  "amherst": botPoisHalifax
+  "halifax": botPoisHalifax
 };
 
 //var botPois = [];
@@ -1408,24 +1423,22 @@ function startBot( )
 
 function _addPoiMarker( lat, lng, title )
 {
-  /*
     var waypMarker = new google.maps.Marker({
       position: new google.maps.LatLng(lat,lng),
       map: map,
       icon: 'images/icon_waypoint.png',
       title: title
     });
-  */
 }
 
-function _addPoiPath( startLat, startLng, endLat, endLng )
+function _addPoiPath( startLat, startLng, endLat, endLng, color )
 {
   var resPath = new google.maps.Polyline({
     path: [
       new google.maps.LatLng(startLat, startLng),
       new google.maps.LatLng(endLat, endLng)
     ],
-    strokeColor: '#FF0000',
+    strokeColor: color,
     strokeOpacity: 0.4,
     strokeWeight: 4,
     clickable: false,
@@ -1440,21 +1453,35 @@ function _addPoiPath( startLat, startLng, endLat, endLng )
 function prepareBot( done ) 
 {
   var prevPoi = null;
+  var totalRouteTime = 0;
   for( var j in botRPois )
   {
+    var botLastPoi = botRPois[j][botRPois[j].length-1];
     for( var i = 0; i < botRPois[j].length; ++i )
     {
       var botPoi = botRPois[j][i];
       
+      // about 7 seconds average to hack a portal
+      //totalRouteTime += 6;
+      
       _addPoiMarker( botPoi[0], botPoi[1], "Waypoint " + i + " (" + botPoi[2] + ")" );
       if( prevPoi ) {
-        _addPoiPath( prevPoi[0], prevPoi[1], botPoi[0], botPoi[1] );
+        _addPoiPath( prevPoi[0], prevPoi[1], botPoi[0], botPoi[1], '#FF0000' );
+        totalRouteTime += game.moveTimeRequired( prevPoi[0], prevPoi[1], botPoi[0], botPoi[1] );
+      } else {
+        totalRouteTime += game.moveTimeRequired( botLastPoi[0], botLastPoi[1], botPoi[0], botPoi[1] );
+        _addPoiPath( botLastPoi[0], botLastPoi[1], botPoi[0], botPoi[1], '#00FF00' );
       }
       
       prevPoi = botPoi;
+      
     }
     
+    secondsPerPortal = totalRouteTime / botRPois[j].length;
+    nemLog( "Route `"+j+"` travel time is " + timeFormat(totalRouteTime) + " (" + (botRPois[j].length) + " portals at " + Math.floor(secondsPerPortal) + " seconds per portal)");
+    
     prevPoi = null;
+    totalRouteTime = 0;
   }
 
   done();

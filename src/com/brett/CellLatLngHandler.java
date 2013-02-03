@@ -1,6 +1,7 @@
 package com.brett;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -22,7 +23,7 @@ public class CellLatLngHandler extends AbstractHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        Long cellId = Long.parseLong(request.getParameter("cellid"),16);
+        Long cellId = new BigInteger(request.getParameter("cellid"),16).longValue();
 		S2CellId foundCell = new S2CellId(cellId);
 		S2LatLng foundLatLng = foundCell.toLatLng();
 		

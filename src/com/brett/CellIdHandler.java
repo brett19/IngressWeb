@@ -30,6 +30,6 @@ public class CellIdHandler extends AbstractHandler
 		
         ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.writeValue(response.getWriter(), Long.toString(foundCell.id(),16) );
+		mapper.writeValue(response.getWriter(), Long.toHexString(foundCell.id()) );
     }
 }

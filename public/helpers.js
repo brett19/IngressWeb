@@ -1,3 +1,21 @@
+function timeFormat(seconds) {
+  var ktime = '';
+  var hours = 0;
+  var minutes = 0;
+  if( seconds >= 3600 ) {
+    hours = Math.floor(seconds/3600);
+    seconds -= hours * 3600;
+  }
+  if( seconds >= 60 ) {
+    minutes = Math.floor(seconds/60);
+    seconds -= minutes * 60;
+  }
+  if( hours > 0 ) ktime += hours + 'h ';
+  if( hours > 0 || minutes > 0 ) ktime += minutes + 'm ';
+  ktime += seconds + 's';
+  return ktime;
+}
+
 function toHex(number)
 {
     if (number < 0) {

@@ -1,6 +1,7 @@
 package com.brett;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -21,7 +22,7 @@ public class CellNearHandler extends AbstractHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        Long cellId = Long.parseLong(request.getParameter("cellid"),16);
+        Long cellId = new BigInteger(request.getParameter("cellid"),16).longValue();
 		S2CellId foundCell = new S2CellId(cellId);
 		
 		ArrayList<S2CellId> neighbourList = new ArrayList<S2CellId>( );
@@ -29,7 +30,7 @@ public class CellNearHandler extends AbstractHandler {
 		
 		ArrayList<String> neighbourIdList = new ArrayList<String>( );
 		for( int i = 0; i < neighbourList.size(); ++i ) {
-			neighbourIdList.add( Long.toString(neighbourList.get(i).id(),16) );
+			neighbourIdList.add( Long.toHexString(neighbourList.get(i).id()) );
 		}
 		
         ObjectMapper mapper = new ObjectMapper();
